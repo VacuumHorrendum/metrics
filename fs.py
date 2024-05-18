@@ -1,29 +1,32 @@
 #!/usr/bin/env python3
 
 """
-    needs python3 (works fine with python3-minimal on debian 12)
-    usage: fs.py [paths...]
-
-    write data for all known mounts into csv file (only works on linux)
-    $ ./fs.py > /tmp/fs.csv
-
-    write data for specific paths into csv file (works on linux and windows)
-    $ ./fs.py / /dev/shm > /tmp/fs.csv
-    $ python fs.py C: > /tmp/fs.csv
+    needs python3 (tested with python3-minimal on debian:12)
 """
 
-import datetime, csv, sys
-import shutil
+import datetime, csv, sys, argparse, shutil, os
+
+parser = argparse.ArgumentParser(description="Write filesystem metrics into csv file")
+parser.add_argument('mounts', metavar="fs", type=str, nargs='*', help="mounts")
+parser.add_argument('--csv', help="output file", metavar="fs.csv")
+
+args = parser.parse_args()
 
 def now() -> str:
     return datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
 
 def getMounts() -> list[str]:
+    if not os.path.exists("/proc/mounts"):
+        return list("/")
     with open('/proc/mounts','r') as f:
         return [line.split()[1] for line in f.readlines()]
 
 fallback = False
-mounts = sys.argv[1:]
+mounts = args.mounts
+f = sys.stdout
+
+if args.csv:
+    f = open(args.csv, 'w')
 
 if len(mounts) == 0:
     fallback = True
@@ -37,6 +40,6 @@ for m in mounts:
     data.append({"now.iso": now(), "fs": m, "total":total, "used":used, "free":free})
 
 if len(data) > 0:
-    w = csv.DictWriter(sys.stdout, data[0].keys())
+    w = csv.DictWriter(f, data[0].keys())
     w.writeheader()
     w.writerows(data)
