@@ -43,3 +43,6 @@ if len(data) > 0:
     w = csv.DictWriter(f, data[0].keys())
     w.writeheader()
     w.writerows(data)
+
+def poetry():
+    return True

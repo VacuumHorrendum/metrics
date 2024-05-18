@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "py_metrics"
+version = "0.1.0"
+description = ""
+authors = ["FF"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.scripts]
+fs = "py_metrics.fs:poetry"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
