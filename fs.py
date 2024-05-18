@@ -1,5 +1,17 @@
 #!/usr/bin/env python3
 
+"""
+    needs python3 (works fine with python3-minimal on debian 12)
+    usage: fs.py [paths...]
+
+    write data for all known mounts into csv file (only works on linux)
+    $ ./fs.py > /tmp/fs.csv
+
+    write data for specific paths into csv file (works on linux and windows)
+    $ ./fs.py / /dev/shm > /tmp/fs.csv
+    $ python fs.py C: > /tmp/fs.csv
+"""
+
 import datetime, csv, sys
 import shutil
 
