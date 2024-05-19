@@ -331,3 +331,6 @@ ASALocalRun/
 
 *.DS_Store
 .cache/
+build/
+dist/
+*.spec
