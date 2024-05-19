@@ -11,6 +11,8 @@ psutil = "^5.9.8"
 
 [tool.poetry.scripts]
 fs = "py_metrics.fs:main"
+mem = "py_metrics.mem:main"
+cpu = "py_metrics.cpu:main"
 
 [build-system]
 requires = ["poetry-core"]
