@@ -7,10 +7,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-psutil = "^5.9.8"
 
 [tool.poetry.scripts]
-fs = "py_metrics.fs:poetry"
+fs = "py_metrics.fs:main"
 
 [build-system]
 requires = ["poetry-core"]
