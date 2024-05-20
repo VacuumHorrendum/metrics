@@ -12,7 +12,7 @@ def now() -> str:
 def main():
     parser = argparse.ArgumentParser(description="Write memory metrics into csv file")
     parser.add_argument('--csv', help="output file", metavar="mem.csv")
-    parser.add_argument('metrics', metavar="metrics", type=str, nargs='*', help="mounts")
+    parser.add_argument('metrics', metavar="metrics", type=str, nargs='*')
     args = parser.parse_args()
 
     f = sys.stdout
