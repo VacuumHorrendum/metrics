@@ -12,26 +12,40 @@ def now() -> str:
 def main():
     parser = argparse.ArgumentParser(description="Write cpu metrics into csv file")
     parser.add_argument('--csv', help="output file", metavar="mem.csv")
-    parser.add_argument('--interval', help="output file", type=float, default=1.0)
+    parser.add_argument('--interval', help="scanning interval", type=float, default=1.0)
+    parser.add_argument('-p', action=argparse.BooleanOptionalAction, default=False, help="include metrics per logical cpu")
     parser.add_argument('metrics', metavar="metrics", type=str, nargs='*')
     args = parser.parse_args()
+    
+    data: list[dict[str,str]] = list()
+
+    def append_row(row:dict[str,str]):
+        new_row = {"now.iso": now()}
+        for k, v in row.items():
+            if args.metrics and k not in args.metrics:
+                continue
+            new_row[k] = v
+        data.append(new_row)
 
     f = sys.stdout
     if args.csv:
         f = open(args.csv, 'w')
 
-    row = {"now.iso": now()}
     times = psutil.cpu_times_percent(interval=args.interval)
     load = round(100.0 - times.idle, 1)
-    metrics = times._asdict()
+    metrics = {'cpu': 'all'} | times._asdict()
     metrics['load'] = load
+    append_row(metrics)
 
-    for k, v in metrics.items():
-        if args.metrics and k not in args.metrics:
-            continue
-        row[k] = v
-    
-    data = [row]
+    if args.p:
+        all_times = psutil.cpu_times_percent(interval=args.interval, percpu=True)
+        core:int = 0
+        for times in all_times:
+            load = round(100.0 - times.idle, 1)
+            metrics = {'cpu': core} | times._asdict()
+            metrics['load'] = load
+            append_row(metrics)
+            core += 1
 
     if len(data) > 0:
         w = csv.DictWriter(f, data[0].keys())
