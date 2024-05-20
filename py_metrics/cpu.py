@@ -13,7 +13,7 @@ def main():
     parser = argparse.ArgumentParser(description="Write cpu metrics into csv file")
     parser.add_argument('--csv', help="output file", metavar="mem.csv")
     parser.add_argument('--interval', help="scanning interval", type=float, default=1.0)
-    parser.add_argument('-p', action=argparse.BooleanOptionalAction, default=False, help="include metrics per logical cpu")
+    parser.add_argument('--percpu', action='store_true', default=False, help="include metrics per logical cpu")
     parser.add_argument('metrics', metavar="metrics", type=str, nargs='*')
     args = parser.parse_args()
     
@@ -37,7 +37,7 @@ def main():
     metrics['load'] = load
     append_row(metrics)
 
-    if args.p:
+    if args.percpu:
         all_times = psutil.cpu_times_percent(interval=args.interval, percpu=True)
         core:int = 0
         for times in all_times:
