@@ -26,6 +26,7 @@ def main():
     f = sys.stdout
 
     if args.csv:
+        os.makedirs(os.path.dirname(args.csv), exist_ok=True)
         f = open(args.csv, 'w')
 
     if len(mounts) == 0:
