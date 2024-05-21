@@ -25,8 +25,9 @@ def main():
     mounts = args.mounts
     f = sys.stdout
 
+    no_headers = args.csv and os.path.exists(args.csv)
     if args.csv:
-        f = open(args.csv, 'w')
+        f = open(args.csv, 'a')
 
     if len(mounts) == 0:
         fallback = True
@@ -41,7 +42,8 @@ def main():
 
     if len(data) > 0:
         w = csv.DictWriter(f, data[0].keys())
-        w.writeheader()
+        if not no_headers:
+            w.writeheader()
         w.writerows(data)
 
 if __name__ == '__main__':

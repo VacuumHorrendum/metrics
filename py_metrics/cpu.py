@@ -4,7 +4,7 @@
     needs python3 ad psutil (python3-psutil on debian:12 or psutil on pypi)
 """
 
-import datetime, csv, sys, argparse, psutil
+import datetime, csv, sys, argparse, psutil, os
 
 def now() -> str:
     return datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
@@ -27,9 +27,10 @@ def main():
             new_row[k] = v
         data.append(new_row)
 
+    no_headers = args.csv and os.path.exists(args.csv)
     f = sys.stdout
     if args.csv:
-        f = open(args.csv, 'w')
+        f = open(args.csv, 'a')
 
     times = psutil.cpu_times_percent(interval=args.interval)
     load = round(100.0 - times.idle, 1)
@@ -49,7 +50,8 @@ def main():
 
     if len(data) > 0:
         w = csv.DictWriter(f, data[0].keys())
-        w.writeheader()
+        if not no_headers:
+            w.writeheader()
         w.writerows(data)
 
 if __name__ == '__main__':

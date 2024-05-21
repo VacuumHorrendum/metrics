@@ -4,7 +4,7 @@
     needs python3 ad psutil (python3-psutil on debian:12 or psutil on pypi)
 """
 
-import datetime, csv, sys, argparse, psutil
+import datetime, csv, sys, argparse, psutil, os
 
 def now() -> str:
     return datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
@@ -15,9 +15,10 @@ def main():
     parser.add_argument('metrics', metavar="metrics", type=str, nargs='*')
     args = parser.parse_args()
 
+    no_headers = args.csv and os.path.exists(args.csv)
     f = sys.stdout
     if args.csv:
-        f = open(args.csv, 'w')
+        f = open(args.csv, 'a')
 
     row = {"now.iso": now()}
     for k, v in psutil.virtual_memory()._asdict().items():
@@ -29,7 +30,8 @@ def main():
 
     if len(data) > 0:
         w = csv.DictWriter(f, data[0].keys())
-        w.writeheader()
+        if not no_headers:
+            w.writeheader()
         w.writerows(data)
 
 if __name__ == '__main__':
