@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-    needs python3 ad psutil (python3-psutil on debian:12 or psutil on pypi)
+    needs python3 and psutil (python3-psutil on debian:12 or psutil on pypi)
 """
 
 import datetime, csv, sys, argparse, psutil, os, time
