@@ -2,7 +2,7 @@
 name = "py-metrics"
 version = "0.1.0"
 description = ""
-authors = ["FF"]
+authors = ["Vacuum"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
