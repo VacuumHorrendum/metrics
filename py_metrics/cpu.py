@@ -11,7 +11,7 @@ def now() -> str:
 
 def main():
     parser = argparse.ArgumentParser(description="Write cpu metrics into csv file")
-    parser.add_argument('--csv', help="output file", metavar="mem.csv")
+    parser.add_argument('--csv', help="output file", metavar="cpu.csv")
     parser.add_argument('--interval', help="scanning interval", type=float, default=1.0)
     parser.add_argument('--timeout', help="run until timeout", type=float, default=0.0)
     parser.add_argument('--percpu', action='store_true', default=False, help="include metrics per logical cpu")
