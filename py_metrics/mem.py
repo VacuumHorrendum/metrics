@@ -4,7 +4,7 @@
     needs python3 ad psutil (python3-psutil on debian:12 or psutil on pypi)
 """
 
-import datetime, csv, sys, argparse, psutil, os
+import datetime, csv, sys, argparse, psutil
 
 def now() -> str:
     return datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
@@ -17,7 +17,6 @@ def main():
 
     f = sys.stdout
     if args.csv:
-        os.makedirs(os.path.dirname(args.csv), exist_ok=True)
         f = open(args.csv, 'w')
 
     row = {"now.iso": now()}
